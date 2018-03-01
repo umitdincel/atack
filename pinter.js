@@ -9,14 +9,14 @@ var waitForEl = function(selector, callback) {
 };
 
 waitForEl('div[message]', function() {
-  var message_rows = $('div[message].clearfix');
+  var messageRows = $('div[message].clearfix');
 
-  $.each(message_rows, function(index, message_row){
-    $(message_row).on('click', function(){
-      var message_box = $(this).find('div[body]')[0];
-      var message_text = $(message_box).find('span').text();
+  $.each(messageRows, function(index, messageRow){
+    $(messageRow).on('click', function(){
+      var messageBox = $(this).find('div[body]')[0];
+      var messageText = $(messageBox).find('span').text();
 
-      console.log(message_text, $(message_box).position());
+      console.log(messageText, $(messageBox).position());
     });
   });
 });

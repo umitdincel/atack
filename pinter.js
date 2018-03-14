@@ -67,6 +67,69 @@ var toggleThumbstack = function(thumbstack) {
   }
 }
 
+var refreshMessages = function(conversationKey, messageRows) {
+  var pinnedMessages = getPinnedMessages(conversationKey);
+
+  $.each(messageRows, function(index, messageRow){
+    var messageBox = $(messageRow).find('div[body]')[0];
+    var direction = $(messageBox).attr('data-tooltip-position');
+    var tUrl = thumbstackURL;
+    var tOpacity = '0.3';
+    var tCLass = 'non-pinned';
+
+    for(var i = 0; pinnedMessages.length > i; i++) {
+      var pinnedMessage = JSON.parse(pinnedMessages[i]);
+      var currentMessage = $(messageBox).find('span').text();
+
+      if(pinnedMessage['message'] == currentMessage) {
+        tUrl = selectedThumbstackURL;
+        tOpacity = '1';
+        tCLass = 'pinned';
+        break;
+      }
+    }
+
+    $(messageBox).append('<div class="thumbstackIcon '+ tCLass +'" style="visibility:hidden;z-index:9;position:absolute;top:50%;margin-top:-10px;cursor:pointer;'+ reverseDirection(direction) +':-85px"><img style="opacity:'+ tOpacity +'" height="20" weight="20" alt="Pin the message" src="'+ tUrl +'"></div>');
+    var thumbstack = $(messageBox).find('.thumbstackIcon')[0];
+
+    $(thumbstack).on('click', function(){
+      var message = $(messageBox).find('span').text();
+
+      if($(thumbstack).hasClass('non-pinned')) {
+        var now = Date.now();
+
+        var pinnedMessages = getPinnedMessages(conversationKey);
+        var data = JSON.stringify({
+          'date': now,
+          'message': message
+        });
+
+        pinnedMessages.push(data);
+        localStorage.setItem(conversationKey, JSON.stringify(pinnedMessages));
+      } else if ($(thumbstack).hasClass('pinned')) {
+        var pinnedMessages = getPinnedMessages(conversationKey);
+        for(var i = 0; pinnedMessages.length > 0; i++) {
+          var pinnedMessage = JSON.parse(pinnedMessages[i]);
+          if(pinnedMessage.message == message) {
+            pinnedMessages.splice(i,1);
+            localStorage.setItem(conversationKey, JSON.stringify(pinnedMessages));
+            break;
+          }
+        }
+      }
+      toggleThumbstack(thumbstack);
+    });
+
+    $(messageRow).on('mouseenter', function(){
+      $(thumbstack).css('visibility', 'visible');
+    });
+
+    $(messageRow).on('mouseleave', function(){
+      $(thumbstack).css('visibility', 'hidden');
+    });
+  });
+}
+
 var scanMessages = function() {
   $$$('div[message]', function() {
     var messageRows = $('div[message].clearfix');
@@ -74,7 +137,6 @@ var scanMessages = function() {
     var senderID = credentials.sender;
     var me = credentials.me;
     var conversationKey = me + '_' + senderID;
-    var pinnedMessages = getPinnedMessages(conversationKey);
 
     $('.showPinnedMeesages').remove();
     $('.pinnedMessagesModal').remove();
@@ -99,63 +161,17 @@ var scanMessages = function() {
       });
     });
 
-    $.each(messageRows, function(index, messageRow){
-      var messageBox = $(messageRow).find('div[body]')[0];
-      var direction = $(messageBox).attr('data-tooltip-position');
-      var tUrl = thumbstackURL;
-      var tOpacity = '0.3';
-      var tCLass = 'non-pinned';
+    refreshMessages(conversationKey, messageRows);
 
-      for(var i = 0; pinnedMessages.length > i; i++) {
-        var pinnedMessage = JSON.parse(pinnedMessages[i]);
-        var currentMessage = $(messageBox).find('span').text();
-
-        if(pinnedMessage['message'] == currentMessage) {
-          tUrl = selectedThumbstackURL;
-          tOpacity = '1';
-          tCLass = 'pinned';
-          break;
-        }
+    var lenMessages = messageRows.length;
+    setInterval(function(){
+      var currentMessages = $('div[message].clearfix');
+      var currentMessageSize = currentMessages.length;
+      if(currentMessageSize > lenMessages){
+        refreshMessages(conversationKey, currentMessages);
+        lenMessages = currentMessageSize;
       }
-
-      $(messageBox).append('<div class="thumbstackIcon '+ tCLass +'" style="visibility:hidden;z-index:9;position:absolute;top:50%;margin-top:-10px;cursor:pointer;'+ reverseDirection(direction) +':-85px"><img style="opacity:'+ tOpacity +'" height="20" weight="20" alt="Pin the message" src="'+ tUrl +'"></div>');
-      var thumbstack = $(messageBox).find('.thumbstackIcon')[0];
-
-      $(thumbstack).on('click', function(){
-        var message = $(messageBox).find('span').text();
-        if($(thumbstack).hasClass('non-pinned')) {
-          var now = Date.now();
-
-          var pinnedMessages = getPinnedMessages(conversationKey);
-          var data = JSON.stringify({
-            'date': now,
-            'message': message
-          });
-
-          pinnedMessages.push(data);
-          localStorage.setItem(conversationKey, JSON.stringify(pinnedMessages));
-        } else if ($(thumbstack).hasClass('pinned')) {
-          var pinnedMessages = getPinnedMessages(conversationKey);
-          for(var i = 0; pinnedMessages.length > 0; i++) {
-            var pinnedMessage = JSON.parse(pinnedMessages[i]);
-            if(pinnedMessage.message == message) {
-              pinnedMessages.splice(i,1);
-              localStorage.setItem(conversationKey, JSON.stringify(pinnedMessages));
-              break;
-            }
-          }
-        }
-        toggleThumbstack(thumbstack);
-      });
-
-      $(messageRow).on('mouseenter', function(){
-        $(thumbstack).css('visibility', 'visible');
-      });
-
-      $(messageRow).on('mouseleave', function(){
-        $(thumbstack).css('visibility', 'hidden');
-      });
-    });
+    }, 1000);
   });
 }
 

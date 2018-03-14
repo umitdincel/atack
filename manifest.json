@@ -5,19 +5,15 @@
   "version": "1.0",
   "browser_action": {
     "default_icon": "icon.png",
-    "default_title": "1Hell yeah!"
+    "default_title": "To pin a message on facebook"
   },
   "content_scripts": [
       {
-        "matches": ["<all_urls>"],
+        "matches": ["http://*/messages*", "https://*/messages*"],
         "js": ["jquery.min.js", "pinter.js"]
       }
     ],
   "permissions": [
-    "activeTab",
-    "http://*/*",
-    "https://*/*",
-    "<all_urls>",
-    "declarativeContent"
+    "activeTab"
   ]
 }

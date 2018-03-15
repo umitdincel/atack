@@ -4,7 +4,7 @@ An extension for pinning things on f.b. because Zuckerberg didn't think of it. W
 
 ## Installation
 
-- Download it [here](https://github.com/umitdincel/pinter/archive/0.1.zip)
+- Download it [here](https://github.com/umitdincel/atack/archive/0.2.zip)
 - You need to do below steps to install this extension.
 
 ```

@@ -152,7 +152,7 @@ var scanMessages = function() {
         body.append('<div style="margin: 10px 0;border: 1px solid #dac6c6;padding: 5px;">Message: '+ pinnedMessage.message +'<hr/>Date: '+ Date(pinnedMessage.date) +'</div>');
       }
       if(pinnedMessages.length == 0) {
-        body.append('<div>You dont have any pinned messages for this conversation.</div>')
+        body.append('<div>You don\'t have any pinned messages for this conversation.</div>')
       }
       var bodyWrapper = $('<div class="pinnedMessagesModal" style="overflow:scroll;height:400px;position:absolute;top:60px;left:50%;z-index:99;background-color:#f1f0f0;text-align:center;width:80%;margin-left:-40%;padding:30px;"><a class="closePinnedMessagesModal" style="position:absolute;top:10px;right:10px;">close</a></div>').append(body);
       $($('div[role="presentation"]')[0]).prepend(bodyWrapper);

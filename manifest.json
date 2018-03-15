@@ -9,7 +9,7 @@
   },
   "content_scripts": [
       {
-        "matches": ["http://*/messages*", "https://*/messages*"],
+        "matches": ["http://*/messages*", "https://*/messages*", "http://www.messenger.com/*", "https://www.messenger.com/*"],
         "js": ["jquery.min.js", "pinter.js"]
       }
     ],

@@ -5,6 +5,9 @@ var setCredentials = function(messages) {
   senderID = getSenderID('left', messages);
   me = getOwnerFbID('right', messages);
 
+  if(!senderID || !me)
+    return
+
   return {'me': me, 'sender': senderID};
 }
 
@@ -12,12 +15,18 @@ var getSenderID = function(direction, messages){
   var anyMessageBox = messages.find('div[data-tooltip-position="'+ direction +'"]')[0];
   var threadid = $(anyMessageBox).attr('threadid');
 
+  if(!threadid)
+    return
+
   return threadid.substr(5,);
 }
 
 var parseOwnerID = function(participants) {
   participants_arr = participants.split('fbid:');
   last_ind = participants_arr[2].indexOf('":');
+
+  if(!participants_arr)
+    return
 
   return participants_arr[2].substr(0, last_ind);
 }
@@ -134,6 +143,10 @@ var scanMessages = function() {
   $$$('div[message]', function() {
     var messageRows = $('div[message].clearfix');
     var credentials = setCredentials(messageRows);
+
+    if(!credentials)
+      return
+
     var senderID = credentials.sender;
     var me = credentials.me;
     var conversationKey = me + '_' + senderID;
@@ -177,7 +190,7 @@ var scanMessages = function() {
 
 $$$('div[role="gridcell"]', function() {
   $('div[role="gridcell"][id^="row_header_id_user"]').on('click', function() {
-    setTimeout(scanMessages, 2000);
+    setTimeout(scanMessages, 100);
   });
 });
 

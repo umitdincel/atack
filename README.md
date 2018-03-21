@@ -16,8 +16,6 @@ Install it from [Chrome Webstore](https://chrome.google.com/webstore/detail/a-ta
 - Assuming there are no errors, the extension should load into your browser
 ```
 
-*It will be on Chrome Webstore as soon as possible.*
-
 ## Contribution
 Reach me out at dincelumit@gmail.com or on twitter [@umitdncel](https://twitter.com/umitdncel)
 

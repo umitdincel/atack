@@ -1,7 +1,5 @@
 # A tack
 
-> An extension for pinning things on f.b. because Zuckerberg didn't think of it. We have various projects on facebook and it became apparent that there needed to be a way to pin more important things to the top of group conversations.  In lieu of money just do cool things for yourself and the world, well the part that deserves it. If you come to Istanbul and are not an asshole you may buy us Raki, if however you are an asshole you may buy us whiskey. [A.M.]
-
 ## Installation
 
 Install it from [Chrome Webstore](https://chrome.google.com/webstore/detail/a-tack/elpanmibiajlaponjbdpmlopdlmeehoo) or manually install it following steps
